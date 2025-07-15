@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>📊 Ukulima Honey Sales Report</title>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    html {
+      height: 100%;
+    }
+    body {
+      background: url('Honey 15.jpg') no-repeat center center fixed;
+      background-size: cover;
+      height: 100%;
+      min-height: 100%; /* ✅ ADD THIS LINE */
+      display: flex;
+      flex-direction: column;
+      background-attachment: fixed;
+    }
+
+
+    .section-with-bg {
+      position: relative;
+      overflow: hidden;
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+      color: #2f1b00;
+      z-index: 1;
+    }
+
+    .section-with-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+        url('Honey 15.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: blur(8px);
+      transform: scale(1.05);
+      z-index: 0;
+    }
+
+    .section-with-bg > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .orange-title {
+      color: rgb(13, 13, 12);
+      font-weight: bold;
+    }
+
+    .table-responsive {
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .logout-btn {
+      background-color: #c0392b;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .logout-btn:hover {
+      background-color: #a93226;
+    }
+  </style>
+</head>
+<body class="bg-light">
+
+  <div class="container py-4">
+    <!-- Title and Logout Row -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="orange-title mb-0">Ukulima Honey Sales Report</h2>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- Filter Form -->
+    <div class="section-with-bg">
+      <form id="filterForm" class="row g-3 mb-4">
+        <div class="col-md-3">
+          <label for="startDate" class="form-label">Start Date</label>
+          <input type="date" id="startDate" name="startDate" class="form-control" />
+        </div>
+        <div class="col-md-3">
+          <label for="endDate" class="form-label">End Date</label>
+          <input type="date" id="endDate" name="endDate" class="form-control" />
+        </div>
+        <div class="col-md-2">
+          <label for="honeyType" class="form-label">Honey Type</label>
+          <select id="honeyType" name="honeyType" class="form-select">
+            <option value="">All</option>
+            <option value="Raw">Raw</option>
+            <option value="Processed">Processed</option>
+            <option value="Herbal">Herbal</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label for="county" class="form-label">County</label>
+          <input type="text" id="county" name="county" class="form-control" placeholder="County" />
+        </div>
+        <div class="col-md-2">
+          <label for="customer" class="form-label">Customer Name</label>
+          <input type="text" id="customerName" name="customerName" class="form-control" placeholder="Name" />
+        </div>
+        <div class="col-md-12 text-end">
+          <button type="submit" class="btn btn-primary">Filter Report</button>
+          <button type="button" class="btn btn-success" onclick="exportCSV()">Export CSV</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Chart -->
+    <div class="section-with-bg">
+      <canvas id="salesChart" height="120"></canvas>
+    </div>
+
+    <!-- Summary -->
+    <div class="section-with-bg alert alert-info d-flex justify-content-between mb-0">
+      <span><strong>Total Revenue:</strong> Ksh <span id="totalRevenue">0</span></span>
+      <span><strong>Total Volume Sold:</strong> <span id="totalVolume">0</span> ml</span>
+      <span><strong>Total Profit:</strong> Ksh <span id="totalProfit">0</span></span>
+    </div>
+
+    <!-- Sales Table -->
+    <div class="section-with-bg table-responsive mb-5">
+      <table id="salesTable" class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Receipt</th>
+            <th>Date</th>
+            <th>Customer</th>
+            <th>Contact</th>
+            <th>Honey Type</th>
+            <th>Units</th>
+            <th>Unit Volume (ml)</th>
+            <th>Total Volume (ml)</th>
+            <th>Price (Ksh)</th>
+            <th>County</th>
+            <th>Profit (Ksh)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function logout() {
+      alert('✅Back to the Admin Page...')
+      localStorage.removeItem('user'); // Optional cleanup
+      window.location.href = "Admin.html"; // Redirect
+    }
+
+    const form = document.getElementById('filterForm');
+    const tbody = document.querySelector('#salesTable tbody');
+    const revenueEl = document.getElementById('totalRevenue');
+    const volumeEl = document.getElementById('totalVolume');
+    const profitEl = document.getElementById('totalProfit');
+    const chartCtx = document.getElementById('salesChart').getContext('2d');
+    let chartInstance;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      fetchSalesReport();
+    });
+
+    function fetchSalesReport() {
+      const params = new URLSearchParams(new FormData(form)).toString();
+
+      fetch(`/api/sales/report?${params}`, {
+        credentials: 'include'
+      })
+        .then(res => res.text())
+        .then(text => {
+          const cleanText = text.replace(/^\uFEFF/, '').trim();
+          const data = JSON.parse(cleanText);
+
+          tbody.innerHTML = '';
+          let honeyTypeTotals = {};
+          let totalProfit = 0;
+
+          data.data.forEach(sale => {
+            const cleanedType = (sale.honey_type || '').trim().toLowerCase();
+            const cleanedCounty = (sale.county || '').trim();
+            const cleanedPrice = parseFloat((sale.total_price || "0").toString().replace(/,/g, ''));
+            const cleanedTotalVolume = parseInt(sale.total_volume || sale.number_quantity * sale.volume_quantity);
+            const cleanedProfit = parseFloat(sale.profit || 0);
+
+            totalProfit += cleanedProfit;
+
+            tbody.innerHTML += `
+              <tr>
+                <td>${sale.receipt_number}</td>
+                <td>${sale.sale_date}</td>
+                <td>${sale.customer_name}</td>
+                <td>${sale.contact_number}</td>
+                <td>${sale.honey_type}</td>
+                <td>${sale.number_quantity}</td>
+                <td>${sale.volume_quantity}</td>
+                <td>${cleanedTotalVolume}</td>
+                <td>${cleanedPrice.toFixed(2)}</td>
+                <td>${cleanedCounty}</td>
+                <td>${cleanedProfit.toFixed(2)}</td>
+              </tr>
+            `;
+
+            if (!honeyTypeTotals[cleanedType]) honeyTypeTotals[cleanedType] = 0;
+            honeyTypeTotals[cleanedType] += cleanedTotalVolume;
+          });
+
+          revenueEl.textContent = Number(data.summary.totalRevenue || 0).toFixed(2);
+          volumeEl.textContent = Number(data.summary.totalVolume || 0).toFixed(0);
+          profitEl.textContent = Number(data.summary.totalProfit || totalProfit).toFixed(2);
+
+          const chartLabels = Object.keys(honeyTypeTotals).map(label => label.charAt(0).toUpperCase() + label.slice(1));
+          const chartData = Object.values(honeyTypeTotals);
+
+          if (chartInstance) chartInstance.destroy();
+          chartInstance = new Chart(chartCtx, {
+            type: 'bar',
+            data: {
+              labels: chartLabels,
+              datasets: [{
+                label: 'Total Volume (ml)',
+                data: chartData,
+                backgroundColor: ['#ffcc00', '#c98115', '#a04e1b']
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'Volume Sold by Honey Type'
+                }
+              }
+            }
+          });
+        })
+        .catch(err => {
+          console.error('❌ Failed to load report:', err);
+          alert('Failed to load report: ' + err.message);
+        });
+    }
+
+    function exportCSV() {
+      let rows = [['Receipt', 'Date', 'Customer', 'Contact', 'Honey Type', 'Units', 'Unit Volume (ml)', 'Total Volume', 'Price (Ksh)', 'County', 'Profit (Ksh)']];
+      document.querySelectorAll('#salesTable tbody tr').forEach(row => {
+        const cols = [...row.children].map(td => td.textContent);
+        rows.push(cols);
+      });
+
+      let csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "Ukulima_Honey_Sales_Report.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    fetchSalesReport();
+  </script>
+
+</body>
+</html>

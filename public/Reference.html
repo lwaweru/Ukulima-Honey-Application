@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🍯 Ukulima Honey Sales and Inventory Information System</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: url('Honey 6.jpg');
+      background-repeat: no-repeat;
+      margin: 0;
+      padding: 0;
+      color: #5d4037;
+      background-size: cover;
+    }
+    header {
+      background: url('Honey 15.jpg');
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+    header h1 {
+      color: orangered;
+      text-shadow: 2px 2px 4px #8d6e63;
+      margin: 0;
+    }
+    #logoutBtn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #8B4513;
+      color: rgb(5, 5, 5);
+      border: none;
+      padding: 6px 12px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #logoutBtn:hover {
+      background: #beb0b0;
+    }
+    main {
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    section {
+      background: url('Honey 15.jpg');
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background-size: contain;
+    }
+    #btn {
+      padding: 8px 9px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 10px;
+      border-radius: 15px;
+      background-color: orangered;
+      font-weight: bold;
+    }
+    #btn:hover {
+      background: #edeae8;
+    }
+    input[type="number"], input[type="text"], select {
+      padding: 8px;
+      border-radius: 50px;
+      border: 1px solid #ccc;
+      width: 80%;
+      margin-bottom: 6px;
+    }
+    .receipt {
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      display: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    #inventoryStatus {
+      margin-top: 10px;
+      font-weight: bold;
+      background: #fff3e0;
+      padding: 10px;
+      border-radius: 5px;
+      display: inline-block;
+    }
+    #h2 {
+      color: rgb(149, 143, 133);
+    }
+    #backBtn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: #8B4513;
+  color: rgb(5, 5, 5);
+  border: none;
+  padding: 5px 10px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: bold;
+}
+#backBtn:hover {
+  background: #beb0b0;
+}
+
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <h1><b>UKULIMA CUSTOMER DETAILS</b></h1>
+    <button id="logoutBtn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+
+  </header>
+<button id="backBtn" onclick="goToShop()"> <i class="fa-solid fa-arrow-left"></i> Back</button>
+
+  <main>
+    <section id="sales">
+      <h2 id="h2">My Honey Order</h2>
+      <div id="inventoryStatus">
+        Raw Honey: <span id="rawStock">Loading...</span><br>
+        Processed Honey: <span id="processedStock">Loading...</span><br>
+        Herbal Honey: <span id="herbalStock">Loading...</span>
+      </div><br><br>
+
+      <select id="honeyType">
+        <option value="raw">Raw Honey</option>
+        <option value="processed">Processed Honey</option>
+        <option value="herbal">Herbal Honey</option>
+      </select><br><br>
+
+      <input type="text" id="customerName" placeholder="Customer Name" /><br />
+      <input type="text" id="contactNumber" placeholder="Contact Number" /><br />
+      <input type="text" id="county" placeholder="County" /><br />
+      <input type="number" id="numberQuantity" placeholder="Number of Jars/Units" /><br />
+      <select id="saleQuantity" required>
+        <option value="">Select Volume per Jar (ml)</option>
+        <option value="1000">1000ml</option>
+        <option value="2000">2000ml</option>
+        <option value="5000">5000ml</option>
+        <option value="7000">7000ml</option>
+        <option value="10000">10000ml</option>
+      </select><br /><br />
+
+      <button onclick="saveOrder()" id="btn">Save Order</button>
+
+      <div class="receipt" id="receipt">
+        <h3>📝 Order Summary</h3>
+        <p id="receiptDetails"></p>
+        <div id="order-timer" style="text-align: center; font-size: 18px; margin-top: 30px; font-weight: bold; color: #0a0a0a;"></div>
+      </div>
+    </section>
+    <section>
+  <h2>📋 My Saved Orders</h2>
+  <div id="ordersList">Loading...</div>
+</section>
+<section id="myRemarkSection" style="display: none;">
+  <h2>💬 My Submitted Remark</h2>
+  <div id="remarkBox" style="background: #fff3cd; border-left: 6px solid orange; padding: 15px; border-radius: 10px;">
+    <p><strong>Remark:</strong> <span id="userRemarkText"></span></p>
+    <p><strong>Status:</strong> <span id="remarkStatusText"></span></p>
+    <p id="adminResponseText" class="text-success" style="display: none;"><strong>Admin Response:</strong> <span></span></p>
+  <button id="deleteRemarkBtn" style="background-color: crimson; color: white; padding: 6px 12px; border: none; border-radius: 8px; margin-top: 10px; cursor: pointer;">
+    🗑️ Delete
+  </button>
+  </div>
+</section>
+
+  </main>
+ 
+<script>
+  const honeyPricePerMl = 1.1115;
+  let stock = { raw: 0, processed: 0, herbal: 0 };
+
+  function logout() {
+    alert('✅ Customer Logging out...');
+    window.location.href = 'SignIn.html';
+  }
+function goToShop() {
+  window.location.href = 'Shop.html';
+}
+
+  function normalizePhone(number) {
+    number = number.trim().replace(/[\s-\(\)]/g, '');
+    if (/^\+2547\d{8}$/.test(number)) return number;
+    if (/^07\d{8}$/.test(number)) return '+254' + number.slice(1);
+    if (/^01\d{8}$/.test(number)) return '+254' + number.slice(1);
+    if (/^7\d{8}$/.test(number)) return '+254' + number;
+    return null;
+  }
+
+  async function fetchInventory() {
+    try {
+      const [inventoryRes, productsRes] = await Promise.all([
+        fetch('/api/inventory'),
+        fetch('/api/products')
+      ]);
+
+      const [inventory, products] = await Promise.all([
+        inventoryRes.json(),
+        productsRes.json()
+      ]);
+
+      stock = { raw: 0, processed: 0, herbal: 0 };
+      inventory.forEach(item => {
+        const product = products.find(p => p.product_id === item.product_id);
+        if (!product) return;
+        const type = product.product_type.toLowerCase().trim();
+        const volume = item.stock_quantity * product.volume_ml;
+        if (type === 'raw honey') stock.raw += volume;
+        if (type === 'processed honey') stock.processed += volume;
+        if (type === 'herbal honey') stock.herbal += volume;
+      });
+
+      document.getElementById('rawStock').textContent = stock.raw + ' ml';
+      document.getElementById('processedStock').textContent = stock.processed + ' ml';
+      document.getElementById('herbalStock').textContent = stock.herbal + ' ml';
+    } catch (err) {
+      console.error('Inventory load error:', err);
+    }
+  }
+
+  function autofillFromCart() {
+    const cart = localStorage.getItem('ukulimaCart');
+    if (!cart) return;
+
+    try {
+      const items = JSON.parse(cart);
+      if (!Array.isArray(items) || items.length === 0) return;
+
+      const latest = items[items.length - 1];
+
+      if (latest.type) {
+        let type = latest.type.toLowerCase().trim();
+        if (type.includes("raw")) type = "raw";
+        else if (type.includes("processed")) type = "processed";
+        else if (type.includes("herbal")) type = "herbal";
+        else type = "";
+        document.getElementById('honeyType').value = type;
+      }
+
+      if (latest.quantity) document.getElementById('numberQuantity').value = latest.quantity;
+      if (latest.volume) document.getElementById('saleQuantity').value = latest.volume;
+    } catch (err) {
+      console.warn('Failed to parse ukulimaCart:', err);
+    }
+  }
+
+  async function saveOrder() {
+    const type = document.getElementById('honeyType').value.trim().toLowerCase();
+    const name = document.getElementById('customerName').value.trim();
+    const rawPhone = document.getElementById('contactNumber').value.trim();
+    const county = document.getElementById('county').value.trim();
+    const quantity = parseInt(document.getElementById('numberQuantity').value);
+    const volume = parseInt(document.getElementById('saleQuantity').value);
+    const phone = normalizePhone(rawPhone);
+
+    if (!name || !phone || !county || isNaN(quantity) || isNaN(volume)) {
+      alert("❌ Please fill all required fields correctly (Name, Phone, County, Quantity, Volume).");
+      return;
+    }
+
+    const total_volume = quantity * volume;
+    const total_price = total_volume * honeyPricePerMl;
+
+    const payload = {
+      name,
+      phone,
+      county,
+      type,
+      quantity,
+      volume,
+      total_volume,
+      total_price
+    };
+
+    console.log("📦 Sending order payload:", payload);
+
+    try {
+      const res = await fetch('/api/pending-orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText || "Failed to save order.");
+      }
+
+localStorage.setItem("order_created_at", new Date().toISOString());
+startCountdown();  // Start countdown immediately after saving
+
+
+      document.getElementById('receiptDetails').innerHTML = `
+        <strong>Customer Name:</strong> ${name}<br>
+        <strong>Phone:</strong> ${phone}<br>
+        <strong>County:</strong> ${county}<br>
+        <strong>Honey Type:</strong> ${type.charAt(0).toUpperCase() + type.slice(1)}<br>
+        <strong>Number of Jars:</strong> ${quantity}<br>
+        <strong>Volume per Jar:</strong> ${volume} ml<br>
+        <strong>Total Volume:</strong> ${total_volume} ml<br>
+        <strong>Estimated Price:</strong> Ksh ${total_price.toFixed(2)}<br>
+        <strong>⏱️ Time:</strong> ${new Date().toLocaleString()}
+      `;
+      document.getElementById('receipt').style.display = 'block';
+      alert(`✅ Thank you ${name}! Your order has been received! Your order has been reserved and will be ready for pickup. Please collect it within 30 days.`);
+
+    } catch (error) {
+      alert("⚠️ Error saving order: " + error.message);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    fetchInventory();
+    autofillFromCart();
+
+    const loggedInEmail = localStorage.getItem("loggedInUserEmail");
+    if (loggedInEmail) {
+      fetch(`/api/customers?email=${encodeURIComponent(loggedInEmail)}`)
+        .then(res => res.json())
+        .then(data => {
+          const customer = data[0];
+          if (customer) {
+            document.getElementById("customerName").value = customer.name;
+            document.getElementById("customerName").readOnly = true;
+            if (customer.contact_number) {
+              document.getElementById("contactNumber").value = customer.contact_number;
+              document.getElementById("contactNumber").readOnly = true;
+            }
+            if (customer.county) {
+              document.getElementById("county").value = customer.county;
+              document.getElementById("county").readOnly = true;
+            }
+          }
+        })
+        .catch(err => console.error("Failed to fetch customer info:", err));
+    }
+  });
+
+  setInterval(fetchInventory, 10000);
+
+    function startCountdown() {
+  const createdAt = localStorage.getItem("order_created_at");
+  if (!createdAt) {
+    console.warn("⛔ No order_created_at found in localStorage.");
+    return;
+  }
+
+  const deadline = new Date(new Date(createdAt).getTime() + 30 * 24 * 60 * 60 * 1000);
+
+  function updateTimer() {
+    const now = new Date();
+    const remaining = deadline - now;
+
+    if (remaining <= 0) {
+      document.getElementById("order-timer").textContent = "⏳ This order has expired!";
+      return;
+    }
+
+    const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((remaining / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((remaining / (1000 * 60)) % 60);
+    const seconds = Math.floor((remaining / 1000) % 60);
+
+    document.getElementById("order-timer").textContent =
+      `🕒 Order will expire in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }
+
+  updateTimer(); // Run immediately
+  setInterval(updateTimer, 1000); // Then every second
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  fetchInventory();
+  autofillFromCart();
+  startCountdown(); // Make sure this runs AFTER localStorage is populated
+});
+
+async function fetchMyOrders() {
+  const email = localStorage.getItem("loggedInUserEmail");
+  if (!email) {
+    document.getElementById("ordersList").innerHTML = "🔒 You must be logged in to view orders.";
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/customers?email=${encodeURIComponent(email)}`);
+    const customers = await res.json();
+    if (!customers.length) return;
+
+    const customer = customers[0];
+    const name = customer.name;
+
+    const ordersRes = await fetch('/api/pending-orders');
+    const allOrders = await ordersRes.json();
+    const myOrders = allOrders.filter(order => order.name === name);
+
+    if (!myOrders.length) {
+      document.getElementById("ordersList").innerHTML = "📭 You have no pending orders.";
+      return;
+    }
+
+    document.getElementById("ordersList").innerHTML = myOrders.map(order => `
+      <div style="margin-bottom: 15px; padding: 10px; background: #fff8e1; border-radius: 8px;">
+        <strong>Type:</strong> ${order.type}<br>
+        <strong>Quantity:</strong> ${order.quantity} jars<br>
+        <strong>Volume:</strong> ${order.volume} ml<br>
+        <strong>Total:</strong> ${order.total_volume} ml<br>
+        <strong>Price:</strong> Ksh ${parseFloat(order.total_price).toFixed(2)}<br>
+        <strong>🗓️ Created:</strong> ${new Date(order.created_at).toLocaleString()}<br>
+        <button onclick="deleteOrder(${order.id})" style="background-color: crimson; color: white; padding: 5px 10px; margin-top: 5px; border: none; border-radius: 5px; cursor: pointer;">
+          🗑️ Delete
+        </button>
+      </div>
+    `).join('');
+  } catch (err) {
+    console.error('Error loading orders:', err);
+    document.getElementById("ordersList").innerHTML = "⚠️ Error loading your orders.";
+  }
+}
+
+async function deleteOrder(orderId) {
+  if (!confirm("Are you sure you want to delete this order?")) return;
+
+  try {
+    const res = await fetch(`/api/pending-orders/${orderId}`, {
+      method: 'DELETE'
+    });
+
+    if (!res.ok) throw new Error("Failed to delete order");
+    alert("✅ Order deleted successfully.");
+    fetchMyOrders();
+  } catch (err) {
+    alert("⚠️ Error deleting order: " + err.message);
+  }
+}
+
+async function loadMyRemark() {
+  const email = localStorage.getItem("loggedInUserEmail");
+  if (!email) return;
+
+  try {
+    const res = await fetch(`/api/remarks?email=${encodeURIComponent(email)}`);
+    const remarks = await res.json();
+
+    if (!Array.isArray(remarks) || remarks.length === 0) return;
+
+    const latestRemark = remarks[remarks.length - 1]; // Show the latest one
+
+    document.getElementById("userRemarkText").textContent = "🔒 Hidden for privacy";
+    document.getElementById("remarkStatusText").textContent = latestRemark.liked
+  ? "✅ Admin has liked your Remark and will soon take action."
+  : "";
+
+
+    if (latestRemark.response) {
+      const responseEl = document.getElementById("adminResponseText");
+      responseEl.querySelector("span").textContent = latestRemark.response;
+      responseEl.style.display = "block";
+    }
+
+    document.getElementById("myRemarkSection").style.display = "block";
+  } catch (err) {
+    console.error("Failed to load remark:", err);
+  }
+}
+async function likeRemark(remarkId) {
+  const response = prompt("💬 Optional admin response:", "Admin has liked your remark and will take action as expected.");
+  try {
+    const res = await fetch(`/api/remarks/like/${remarkId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ response })
+    });
+    if (!res.ok) throw new Error("Failed to like remark.");
+    alert("✅ Remark liked and feedback saved.");
+    loadRemarks(); // refresh
+  } catch (err) {
+    alert("⚠️ " + err.message);
+  }
+}
+
+async function deleteRemark() {
+  const email = localStorage.getItem("loggedInUserEmail");
+  if (!email) return;
+
+  try {
+    const res = await fetch(`/api/remarks?email=${encodeURIComponent(email)}`);
+    const remarks = await res.json();
+    if (!remarks.length) return;
+
+    const latestRemark = remarks[remarks.length - 1];
+    const confirmed = confirm("Are you sure you want to delete this remark?");
+    if (!confirmed) return;
+
+    const deleteRes = await fetch(`/api/remarks/${latestRemark.id}`, {
+      method: "DELETE"
+    });
+
+    if (!deleteRes.ok) throw new Error("Failed to delete remark.");
+
+    alert("✅ Your remark has been deleted.");
+    document.getElementById("myRemarkSection").style.display = "none";
+  } catch (err) {
+    console.error("Failed to delete remark:", err);
+    alert("⚠️ Error deleting your remark.");
+  }
+}
+document.getElementById("deleteRemarkBtn").onclick = deleteRemark;
+document.addEventListener('DOMContentLoaded', () => {
+  fetchInventory();
+  autofillFromCart();
+  startCountdown();
+  fetchMyOrders();
+  loadMyRemark(); // 👈 Add this here
+});
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

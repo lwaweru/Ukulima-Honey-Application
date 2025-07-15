@@ -1,0 +1,171 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+.container {
+    width: 100%;
+    min-height: 100vh;
+    background-image: url("Honey 3.png");
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 0;
+}
+.input-field select {
+  width: 100%;
+  border:none;
+  background: #e8f0fe;
+  font-size: 16px;
+  height: auto;
+  padding: 9px;
+}
+
+.form-box {
+    width: 90%;
+    max-width: 400px;
+    background-image: url('Honey 15.jpg');
+    background-size: auto;
+    padding: 50px 40px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+}
+.form-box h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: rgb(12, 12, 12);
+}
+.form-box h2 {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial black, sans-serif;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    color: rgb(233, 94, 2);
+    text-transform: uppercase;
+}
+
+.input-group {
+    height: auto;
+    margin-bottom: 16px;
+}
+
+.input-field {
+    background: white;
+    margin: 10px 0;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding: 5px;
+}
+
+input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    padding: 9px;
+}
+form p {
+    text-align: left;
+    font-size: 13px;
+    color: rgb(205, 122, 14);
+}
+
+form p a {
+    text-decoration: none;
+    color: rgb(16, 16, 16);
+    font-weight: bolder;
+}
+form p a:hover{
+    color: white;
+}
+.button-field {
+    width: 100%;
+}
+
+.button-field button {
+    width: 100%;
+    background: black;
+    color: orange;
+    height: 40px;
+    border-radius: 50px;
+    border: none;
+    outline: none;
+    transition: 0.3s ease-in-out;
+    font-weight: bold;
+}
+
+.button-field button:hover {
+    background: darkgray;
+    cursor: pointer;
+}
+.disable {
+    opacity: 1;
+    pointer-events: auto;
+}
+#nameField {
+    max-height: 65px;
+    transition: max-height 0.5s ease-in-out;
+}
+.button-field a {
+    color: rgb(207, 136, 3);
+    text-decoration:none;
+   
+}
+
+.button-field a:hover {
+    color: darkorange; 
+}
+.login-btn {
+    display: inline-block;
+    background: black;
+    color: orange;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.5s ease-in-out;
+    margin: auto;
+}
+
+.login-btn:hover {
+    background: darkgray;
+}
+.RememberMe {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0 20px;
+  font-size: 14px;
+  color: white;
+  white-space: nowrap;
+}
+
+.RememberMe input[type="checkbox"] {
+  margin-right: 6px;
+  transform: scale(1.1);
+  accent-color: #db7a04;
+}
+
+.RememberMe label {
+  display: flex;
+  align-items: center;
+  color: rgb(127, 63, 4);
+  cursor: pointer;
+}
+
+.RememberMe a {
+  color: #a54200;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.RememberMe a:hover {
+  color: rgb(50, 25, 1);
+}

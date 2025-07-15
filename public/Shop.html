@@ -1,0 +1,273 @@
+<!-- ✅ Below this line is your updated Shop.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🍯 Ukulima Honey Shop</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-image: url('Honey 6.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      min-height: 100vh;
+      color: #030303;
+    }
+
+    .top-bar {
+      display: flex;
+      height: 60px;
+      justify-content: space-between;
+      align-items: center;
+      background: url('Honey 15.jpg');
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      position: relative;
+    }
+
+    .top-bar .center-title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 30px;
+      font-weight: bold;
+      color: #030303;
+      font-family: 'Arial', sans-serif;
+    }
+
+    h1 {
+      text-align: center;
+      color: #fff;
+      padding: 30px 0;
+      margin-bottom: 40px;
+      font-size: 23px;
+      border-radius: 10px;
+    }
+
+    .product-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .product-card {
+      background: url('Honey 15.jpg');
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      padding: 20px;
+      width: 100%;
+      max-width: 300px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .product-card h3 {
+      color: rgb(139, 62, 2);
+      margin-bottom: 10px;
+      font-size: 20px;
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+
+    .product-card p {
+      font-size: 14px;
+      color: #2e2e2e;
+      font-style: italic;
+      margin-top: -5px;
+      margin-bottom: 15px;
+    }
+
+    .product-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 10px 0;
+      font-size: 15px;
+      color: rgb(6, 5, 5);
+      font-weight: bold;
+    }
+
+    .product-item span {
+      flex: 1;
+      text-align: left;
+    }
+
+    input[type="number"] {
+      width: 60px;
+      padding: 6px;
+      border-radius: 5px;
+      border: none;
+      text-align: center;
+      margin: 0 10px;
+    }
+
+    button {
+      background-color: #ef4c05;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #ef6c00;
+    }
+
+    #checkout-btn {
+      display: block;
+      margin: 40px auto 0;
+      padding: 15px 30px;
+      background-color: black;
+      color: #ffcc00;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    #checkout-btn:hover {
+      background-color: #e2e1dc;
+      color: black;
+    }
+
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      padding: 20px;
+      background-color: #a04e1b;
+      color: #fff;
+    }
+
+    footer a {
+      color: #ffcc00;
+      text-decoration: none;
+    }
+
+    .social-icons {
+      margin-top: 10px;
+    }
+
+    .social-icons a {
+      color: #ffcc00;
+      font-size: 24px;
+      margin: 0 10px;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .social-icons a:hover {
+      color: white;
+    }
+
+    #logout-btn {
+      font-size: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      color: rgb(5, 5, 5);
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #8B4513;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #logout-btn:hover {
+      background-color: #561a06;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+  <div class="top-bar">
+    <div></div>
+    <div class="center-title">UKULIMA HONEY SHOP</div>
+    <button id="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i>Logout</button>
+  </div>
+
+  <h1><i>Welcome Customer!</i></h1>
+
+  <div class="product-container">
+    <!-- Raw Honey -->
+    <div class="product-card">
+      <h3>🐝RAW HONEY</h3>
+      <div class="product-item"><span>10,000 ml - Ksh 11115.00</span><input type="number" id="qty-raw-10000" placeholder="Qty"><button onclick="addToCart('Raw Honey', 10000, 11115, 'qty-raw-10000')">Add</button></div>
+      <div class="product-item"><span>7,000 ml - Ksh 7780.50</span><input type="number" id="qty-raw-7000" placeholder="Qty"><button onclick="addToCart('Raw Honey', 7000, 7780.5, 'qty-raw-7000')">Add</button></div>
+      <div class="product-item"><span>5,000 ml - Ksh 5557.50</span><input type="number" id="qty-raw-5000" placeholder="Qty"><button onclick="addToCart('Raw Honey', 5000, 5557.5, 'qty-raw-5000')">Add</button></div>
+      <div class="product-item"><span>2,000 ml - Ksh 2223.00</span><input type="number" id="qty-raw-2000" placeholder="Qty"><button onclick="addToCart('Raw Honey', 2000, 2223, 'qty-raw-2000')">Add</button></div>
+      <div class="product-item"><span>1,000 ml - Ksh 1111.50</span><input type="number" id="qty-raw-1000" placeholder="Qty"><button onclick="addToCart('Raw Honey', 1000, 1111.5, 'qty-raw-1000')">Add</button></div>
+    </div>
+
+    <!-- Processed Honey -->
+    <div class="product-card">
+      <h3>🍯PROCESSED HONEY</h3>
+      <div class="product-item"><span>10,000 ml - Ksh 11115.00</span><input type="number" id="qty-processed-10000" placeholder="Qty"><button onclick="addToCart('Processed Honey', 10000, 11115, 'qty-processed-10000')">Add</button></div>
+      <div class="product-item"><span>7,000 ml - Ksh 7780.50</span><input type="number" id="qty-processed-7000" placeholder="Qty"><button onclick="addToCart('Processed Honey', 7000, 7780.5, 'qty-processed-7000')">Add</button></div>
+      <div class="product-item"><span>5,000 ml - Ksh 5557.50</span><input type="number" id="qty-processed-5000" placeholder="Qty"><button onclick="addToCart('Processed Honey', 5000, 5557.5, 'qty-processed-5000')">Add</button></div>
+      <div class="product-item"><span>2,000 ml - Ksh 2223.00</span><input type="number" id="qty-processed-2000" placeholder="Qty"><button onclick="addToCart('Processed Honey', 2000, 2223, 'qty-processed-2000')">Add</button></div>
+      <div class="product-item"><span>1,000 ml - Ksh 1111.50</span><input type="number" id="qty-processed-1000" placeholder="Qty"><button onclick="addToCart('Processed Honey', 1000, 1111.5, 'qty-processed-1000')">Add</button></div>
+    </div>
+
+    <!-- Herbal Honey -->
+    <div class="product-card">
+      <h3>🌿HERBAL HONEY</h3>
+      <div class="product-item"><span>10,000 ml - Ksh 11115.00</span><input type="number" id="qty-herbal-10000" placeholder="Qty"><button onclick="addToCart('Herbal Honey', 10000, 11115, 'qty-herbal-10000')">Add</button></div>
+      <div class="product-item"><span>7,000 ml - Ksh 7780.50</span><input type="number" id="qty-herbal-7000" placeholder="Qty"><button onclick="addToCart('Herbal Honey', 7000, 7780.5, 'qty-herbal-7000')">Add</button></div>
+      <div class="product-item"><span>5,000 ml - Ksh 5557.50</span><input type="number" id="qty-herbal-5000" placeholder="Qty"><button onclick="addToCart('Herbal Honey', 5000, 5557.5, 'qty-herbal-5000')">Add</button></div>
+      <div class="product-item"><span>2,000 ml - Ksh 2223.00</span><input type="number" id="qty-herbal-2000" placeholder="Qty"><button onclick="addToCart('Herbal Honey', 2000, 2223, 'qty-herbal-2000')">Add</button></div>
+      <div class="product-item"><span>1,000 ml - Ksh 1111.50</span><input type="number" id="qty-herbal-1000" placeholder="Qty"><button onclick="addToCart('Herbal Honey', 1000, 1111.5, 'qty-herbal-1000')">Add</button></div>
+    </div>
+  </div>
+
+  <button id="checkout-btn" onclick="proceedToCheckout()">Proceed To Checkout</button>
+ 
+
+ <div style="max-width: 900px; margin: 40px auto; background-color: rgba(255,255,255,0.9); padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); color: #3b2d1f; font-family: Arial, sans-serif;">
+  <h2 style="text-align: center; color: #8B4513;">🍯 About Our Products</h2>
+  <ul style="font-size: 16px; line-height: 1.7; padding-left: 20px;">
+    <li><strong>🐝 Raw Honey:</strong> Straight from the hive, raw honey is unfiltered and unpasteurized. It's rich in antioxidants, pollen, and natural enzymes that support immune health.</li>
+    <li><strong>🍯 Processed Honey:</strong> Our processed honey is gently filtered and pasteurized to ensure purity and longer shelf life. Ideal for smooth texture and consistent taste.</li>
+    <li><strong>🌿 Herbal Honey:</strong> A unique fusion of natural honey and medicinal herbs. Perfect for wellness lovers seeking natural remedies, energy, and healing benefits.</li>
+  </ul>
+</div>
+<div style="max-width: 900px; margin: 40px auto; background-color: rgba(255,255,255,0.95); padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); color: #3b2d1f; font-family: Arial, sans-serif;">
+  <h2 style="text-align: center; color: #8B4513;">📝 Leave a Remark</h2>
+  <textarea id="customerRemark" placeholder="Share your thoughts or experience..." rows="4" style="width: 100%; padding: 12px; font-size: 16px; border-radius: 10px; border: 1px solid #ccc;"></textarea>
+  <button onclick="submitRemark()" style="margin-top: 10px; padding: 10px 20px; font-size: 16px; background-color: #8B4513; color: white; border: none; border-radius: 6px; cursor: pointer;">Submit Remark</button>
+</div>
+
+  <footer itemscope itemtype="https://schema.org/Organization" style="text-align: center; color: #FFC107; background: #8B4513; padding: 20px;">
+    <p>Contact us on: <strong>0115393879</strong> or <strong>0774211467</strong></p>
+    <p>Email: <a href="mailto:info@uhoneyapp.com" style="color: #FFC107;">info@uhoneyapp.com</a></p>
+    <p>Visit us at: <a href="http://www.uhoneyapp.com" style="color: #FFC107;">www.uhoneyapp.com</a></p>
+    <p>&copy; 2025 Ukulima Honey Sales and Inventory Information System</p>
+    <a href="https://twitter.com/yourhandle" target="_blank" style="color: #FFC107; font-size: 2rem; margin: 0 10px;">
+      <i class="fab fa-x-twitter"></i>
+    </a>
+    <a href="https://wa.me/yourwhatsapplink" target="_blank" style="color: #FFC107; font-size: 2rem; margin: 0 10px;">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+    <a href="https://www.instagram.com/yourhandle" target="_blank" style="color: #FFC107; font-size: 2rem; margin: 0 10px;">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://www.linkedin.com/in/yourhandle" target="_blank" style="color: #FFC107; font-size: 2rem; margin: 0 10px;">
+      <i class="fab fa-linkedin"></i>
+    </a>
+    <p><strong>🕒 Note:</strong> Kindly collect your order within <strong>30 days</strong> to avoid cancellation. Call us to schedule your pickup.</p>
+  </footer>
+  <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+style="position: fixed; bottom: 30px; right: 30px; background: #8B4513; color: #fff; border: none; border-radius: 50%; width: 45px; height: 45px; font-size: 20px; cursor: pointer;">↑</button>
+
+  <script src="Shop.js"></script>
+</body>
+</html>
