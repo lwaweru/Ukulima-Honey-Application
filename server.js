@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const db = require('./db');
 const cors = require('cors');
 const path = require('path');
@@ -448,17 +448,22 @@ app.post('/api/remarks/like/:id', (req, res) => {
 
 app.delete('/api/remarks/:id', (req, res) => {
   const id = req.params.id;
+
   db.query('SELECT liked FROM remarks WHERE id = ?', [id], (err, results) => {
     if (err) return res.status(500).json({ error: 'Failed to check remark' });
     if (results.length === 0) return res.status(404).json({ error: 'Remark not found' });
-    if (!results[0].liked) return res.status(403).json({ error: 'Only liked remarks can be deleted' });
+
+    if (!results[0].liked) {
+      return res.status(403).json({ error: 'Only liked remarks can be deleted' });
+    }
 
     db.query('DELETE FROM remarks WHERE id = ?', [id], (err) => {
       if (err) return res.status(500).json({ error: 'Failed to delete remark' });
-      res.status(200).json({ message: 'Remark deleted' });
+      res.status(200).json({ message: 'Remark deleted successfully' });
     });
   });
 });
+
 
 // === Pending Orders API ===
 
